@@ -3,7 +3,7 @@
 
 <head>
     <title>Chat App</title>
-    <link rel="stylesheet" type="text/css" href="main.css">
+    <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
     <div class="chat">
@@ -14,6 +14,16 @@
         <textarea class="chat-textarea" placeholder="Type your message"></textarea>
         <div class="chat-status">Status: <span>Idle</span></div>
     </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io('http://10.10.10.10:8080');
+      socket.on('news', function (data) {
+        console.log(data);
+        socket.emit('my other event', { my: 'data' });
+      });
+    </script>
+
 </body>
 
 </html>
