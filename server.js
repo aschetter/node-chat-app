@@ -28,6 +28,10 @@ MongoClient.connect('mongodb://127.0.0.1/chat', function(err, db) {
     io.on('connection', function (socket) {
 
         var collection = db.collection('messages');
+        
+        function sendStatus (s) {
+            socket.emit('status', s);
+        };
 
         socket.emit('connected', 'You are connected to the chat server!');
         socket.on('confirmConnection', function (data) {
@@ -42,7 +46,7 @@ MongoClient.connect('mongodb://127.0.0.1/chat', function(err, db) {
             var whiteSpaceCheck = /^\s*$/;
 
             if (whiteSpaceCheck.test(name) || whiteSpaceCheck.test(message)) {
-                console.log('Invalid');
+                sendStatus('Name and message is required.');
             } else {
                 collection.insert({name: name, message: message}, function() {
                     console.log('Inserted');
