@@ -5,25 +5,23 @@
     <title>Chat App</title>
     <link rel="stylesheet" href="/css/main.css">
 </head>
-<body>
-    <div class="chat">
-        <input type="text" class="chat-name" placeholder="Enter your name">
-        <div class="chat-messages">
-            <!-- <div class="chat-message"></div> -->
+    <body>
+        <div class="chat">
+            <input type="text" class="chat-name" placeholder="Enter your name">
+            <div class="chat-messages">
+                <!-- <div class="chat-message"></div> -->
+            </div>
+            <textarea class="chat-textarea" placeholder="Type your message"></textarea>
+            <div class="chat-status">Status: <span>Idle</span></div>
         </div>
-        <textarea class="chat-textarea" placeholder="Type your message"></textarea>
-        <div class="chat-status">Status: <span>Idle</span></div>
-    </div>
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-      var socket = io('http://10.10.10.10:8080');
-      socket.on('news', function (data) {
-        console.log(data);
-        socket.emit('my other event', { my: 'data' });
-      });
-    </script>
-
-</body>
-
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+          var socket = io('http://localhost:8080');
+          socket.on('connected', function (data) {
+            console.log(data);
+            socket.emit('confirmConnection', 'Someone connected to the server!');
+          });
+        </script>
+    </body>
 </html>
