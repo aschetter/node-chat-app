@@ -14,14 +14,33 @@
             <textarea class="chat-textarea" placeholder="Type your message"></textarea>
             <div class="chat-status">Status: <span>Idle</span></div>
         </div>
-
         <script src="/socket.io/socket.io.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script>
-          var socket = io('http://localhost:8080');
-          socket.on('connected', function (data) {
-            console.log(data);
-            socket.emit('confirmConnection', 'Someone connected to the server!');
-          });
+            var socket = io('http://localhost:8080');
+
+            socket.on('connected', function (data) {
+                console.log(data);
+                socket.emit('confirmConnection', 'Someone connected to the server!');
+            });
+
+            var textArea = $('.chat-textarea');
+
+            textArea.on('keydown', function (e) {
+
+                if(e.which === 13) {
+                    var name = $('.chat-name').val();
+                    var message = this.value;
+
+                    socket.emit('toServer', {
+                        name: name,
+                        message: message
+                    });
+
+                    console.log("My name: " + name);
+                    console.log("My message: " + message);
+                }
+            });
         </script>
     </body>
 </html>
