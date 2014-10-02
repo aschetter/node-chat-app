@@ -14,32 +14,51 @@
             <textarea class="chat-textarea" placeholder="Type your message"></textarea>
             <div class="chat-status">Status: <span>Idle</span></div>
         </div>
+        <!-- Socket.io -->
         <script src="/socket.io/socket.io.js"></script>
+        <!-- jQuery -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script>
+
+            // Establish socket connection
             var socket = io('http://localhost:8080');
 
+            // Deliver message to the server confirming the connection
             socket.on('connected', function (data) {
                 console.log(data);
                 socket.emit('confirmConnection', 'Someone connected to the server!');
             });
 
-            var textArea = $('.chat-textarea');
+            // Change the user's chat status
+            var statusDefault = $('.chat-status span').text();
+            var $status = $('.chat-status span');
 
-            textArea.on('keydown', function (e) {
+            function setStatus (s) {
+                $status.html(s);
+            };
 
-                if(e.which === 13) {
-                    var name = $('.chat-name').val();
-                    var message = this.value;
+            // Add event listener to send the message when the user hits 'enter'
+            if (socket !== undefined) {
+                var textArea = $('.chat-textarea');
 
-                    socket.emit('toServer', {
-                        name: name,
-                        message: message
-                    });
+                textArea.on('keydown', function (e) {
 
-                    e.preventDefault();
-                }
-            });
+                    // 13 represents 'enter' on the keyboard.
+                    if(e.which === 13) {
+                        var name = $('.chat-name').val();
+                        var message = this.value;
+
+                        // Send the message to the server
+                        socket.emit('toServer', {
+                            name: name,
+                            message: message
+                        });
+
+                        e.preventDefault();
+                    }
+                }); 
+            }
+
         </script>
     </body>
 </html>
