@@ -47,9 +47,18 @@
 
             // Add event listener to send the message when the user hits 'enter'
             if (socket !== undefined) {
-                var textArea = $('.chat-textarea');
 
-                textArea.on('keydown', function (e) {
+                var $textArea = $('.chat-textarea');
+
+                socket.on('status', function(data) {
+                    setStatus((typeof data === 'object') ? data.message : data);
+
+                    if (data.clear === true) {
+                        $textArea.val('');
+                    }
+                });
+
+                $textArea.on('keydown', function (e) {
 
                     // 13 represents 'enter' on the keyboard.
                     if(e.which === 13) {
