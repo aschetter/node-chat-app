@@ -68,7 +68,10 @@ MongoClient.connect('mongodb://127.0.0.1/chat', function(err, db) {
                 // If the content and name aren't empty, store the message in the DB
                 collection.insert({name: name, message: message}, function() {
 
-                    // Send message to the client confirming the message was received
+                    // Send most recent message to all clients
+                    io.emit('output', [data]);
+
+                    // Send status to the client confirming the message was received
                     sendStatus({
                         message: "Message sent.",
                         clear: true

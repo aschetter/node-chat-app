@@ -29,10 +29,14 @@
                 socket.emit('confirmConnection', 'Someone connected to the server!');
             });
 
+            socket.on('output', function (data) {
+                console.log(data);
+            });
+
             // Change the user's chat status
             var statusDefault = $('.chat-status span').text();
             var $status = $('.chat-status span');
-            
+
             function setStatus (s) {
                 $status.html(s);
 
