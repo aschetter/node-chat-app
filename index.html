@@ -35,6 +35,14 @@
 
             function setStatus (s) {
                 $status.html(s);
+
+                // Change a user's status back to idle after 3 seconds of inaction
+                if (s !== statusDefault) {
+                    var delay = setTimeout(function() {
+                        setStatus(statusDefault);
+                        clearInterval(delay);
+                    }, 3000);
+                }
             };
 
             // Add event listener to send the message when the user hits 'enter'
