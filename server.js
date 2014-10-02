@@ -29,18 +29,27 @@ MongoClient.connect('mongodb://127.0.0.1/chat', function(err, db) {
     // Connect to socket.io
     io.on('connection', function (socket) {
 
-        // Use the messages collection
+        // Use the 'messages' collection
         var collection = db.collection('messages');
-        
-        function sendStatus (s) {
-            socket.emit('status', s);
-        };
 
         // Send a message to the client confirming it connected to the server
         socket.emit('connected', 'You are connected to the chat server!');
         socket.on('confirmConnection', function (data) {
             console.log(data);
         });
+
+        // Send the messages stored in the DB when the user loads the page
+        collection.find().limit(100).sort({_id: 1}).toArray(function(err, res) {
+            if (err) {
+                throw err;
+            }
+            socket.emit('output', res);
+        });
+
+        // Define method to send the message status
+        function sendStatus (s) {
+            socket.emit('status', s);
+        };
 
         // Process messages sent from the client
         socket.on('toServer', function (data) {
